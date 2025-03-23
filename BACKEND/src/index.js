@@ -19,8 +19,8 @@ app.use(
   cors({
     origin: "chat-application-8phfkxaso-kashishs-projects-389cba67.vercel.app",
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH","OPTIONS"],
+    // allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   })
 );
 dotenv.config({ path: path.join(__dirname, "../.env") });
