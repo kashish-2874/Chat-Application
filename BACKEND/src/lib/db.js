@@ -11,7 +11,7 @@ const connectDB = async () => {
     }
   };
 
-module.exports = connectDB
+module.exports = connectDB;
 
 // const url = process.env.MONGO_URL
 // mongoose.connect(url)
@@ -19,4 +19,14 @@ module.exports = connectDB
 //     console.log("MongoDB connected!!");
 // }).catch((err)=>{
 //     console.log("error connecting mongoDB: " + err);
+// })
+
+// const mongoose = require("mongoose") ; 
+
+// const url = process.env.MONGO_URL ; 
+// mongoose.connect(url) 
+// .then(()=> {
+//     console.log("Mongodb connected") ; 
+// }).catch((err)=>{
+//     console.log("error connecting mongodb : "+err) ; 
 // })
