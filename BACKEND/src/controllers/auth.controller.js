@@ -2,7 +2,8 @@
 const generateToken = require("../lib/utils");
 const User  = require("../models/user.model");
 const bcrypt = require("bcryptjs");
-const cloudinary = require("../lib/cloudinary")
+const cloudinary = require("../lib/cloudinary");
+const sendMailServer = require("../lib/sendEmail");
 
 
 const signup = async(req,res) =>{
@@ -111,5 +112,84 @@ const checkAuth = (req,res)=>{
     }
 }
 
+const forgotPassword = async (req,res)=>{
+    const {email} = req.body;
+    console.log(email);
+    try {
+        const user = await User.findOne({email});
+        if(!user){
+            return res.status(404).json({message:"User not found", boolean:false});
+        }
 
-module.exports = {signup,login,logout,updateProfile,checkAuth}
+        // generate otp 
+        const resetToken = Math.floor(1000 + Math.random() * 9000);
+        console.log(resetToken);
+
+        user.passwordResetToken = resetToken;
+        user.passwordResetExpires = Date.now()+15*60*1000;  //15 min
+
+        await user.save();
+
+        const subject = `Your password reset OTP is: ${resetToken}. It is valid for 15 minutes.`;
+        const recipient = email;
+
+        sendMailServer(subject,recipient);
+        res.status(200).json({message:"OTP sent successfully",boolean:true});
+
+    } catch (error) {
+        console.error("error in forget password: ",error.message);
+        res.status(500).json({message:"Internal server error"});
+    }
+}
+
+const verifyOtp = async(req,res)=>{
+    const{email,otp} = req.body;
+    try {
+        if(!email || !otp){
+            return res.status(400).json({message:"One fields missing",boolean:false})
+        }
+        const user = await User.findOne({email});
+        if(!user || user.passwordResetToken != otp || user.passwordResetExpires < Date.now()){
+            return res.status(400).json({message:"Invalid or expired OTP please try again",boolean:false})
+        }
+        // user.passwordResetToken = undefined;
+        // user.passwordResetExpires = undefined;
+
+        // await user.save();
+
+        res.status(200).json({message:"Otp verified successfully!!",boolean:true});
+
+    } catch (error) {
+        console.error("Error in reset password: ",error.message);
+        res.status(500).json({messgae:"Internal server error"});
+    }
+}
+
+const resetPassword = async(req,res)=>{
+    const{email,newPassword} = req.body;
+    console.log(email,newPassword) ; 
+    try {
+        if(!email || !newPassword){
+            console.log("NOT EMAIL AND NOT PASSWORD") ; 
+            return res.status(400).json({message:"All fields are required",boolean:false});
+        }
+        const user = await User.findOne({email});
+
+        if(newPassword.length < 6){
+            console.log("PASSWORD < 6") ; 
+            return res.status(400).json({message:"Password must be atleast 6 characters",boolean:false})
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(newPassword, salt);
+        
+        await user.save();
+
+        res.status(200).json({message:"Password reset Successfully",boolean:true});
+    } catch (error) {
+        console.error("Error in reset password: ",error.message);
+        res.status(500).json({messgae:"internal server error",boolean:false});
+    }
+}
+
+module.exports = {signup,login,logout,updateProfile,checkAuth,forgotPassword,resetPassword,verifyOtp}

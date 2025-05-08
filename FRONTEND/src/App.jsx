@@ -13,6 +13,9 @@ import { useEffect } from "react";
 
 import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
+import ForgotPassword from "./pages/ForgotPassword";
+import EnterOTP from "./pages/EnterOTP";
+import ChangePassword from "./pages/ChangePassword";
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
@@ -43,6 +46,9 @@ const App = () => {
         <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/login" />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/EnterOTP/:email" element={<EnterOTP/>} />
+        <Route path="changePassword/:email" element={<ChangePassword />} />
       </Routes>
 
       <Toaster />

@@ -81,15 +81,16 @@ const LoginPage = () => {
 
           </form>
           <div className="text-center">
+            <Link to='/forgot-password' className="link link-primary">Forgot Password</Link>
             <p className="text-base-content/60">
-            Don't have an account?(" ")
-            <Link to="/signup" className="link link-primary"> Create account</Link>
+            Don't have an account? 
+            <Link to="/signup" className="link link-primary">Create account</Link>
             </p>
           </div>
         </div>
       </div>
 
-      <AuthImagePattern title={"Welcome Bbck!"} subtitle={"sihn in to continue your conversations and catch up with your messages"}  />
+      <AuthImagePattern title={"Welcome Back!"} subtitle={"sign in to continue your conversations and catch up with your messages"}  />
     </div>
   )
 }
