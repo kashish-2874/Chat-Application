@@ -18,7 +18,8 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin:"https://chat-application-puce-tau.vercel.app",
+    // origin:"https://chat-application-puce-tau.vercel.app",
+    origin : "https://chat-application-8phfkxaso-kashishs-projects-389cba67.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH","OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
