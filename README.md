@@ -42,4 +42,3 @@ The application follows a typical MERN stack architecture:
 - MongoDB stores user and message data  
 - Socket.IO enables real-time communication  
 
-## Project Structure
